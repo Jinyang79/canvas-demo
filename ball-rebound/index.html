@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>圆形碰撞反弹</title>
+  <style>
+    #canvas {
+      box-shadow: 0 5px 40px black;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -250px;
+      margin-left: -400px;
+    }
+  </style>
+</head>
+
+<body onload="draw()">
+  <canvas id="canvas" width="800" height="500"></canvas>
+  <script>
+    function draw() {
+      let canvas = document.getElementById('canvas');
+
+      if (canvas.getContext) {
+        let cvsCtx = canvas.getContext('2d');
+        // 面向对象方法
+        function Ball(x, y, r, speedX, speedY, color) {
+          this.x = x;
+          this.y = y;
+          this.r = r;
+          this.speedX = speedX;
+          this.speedY = speedY;
+          this.color = color;
+
+          // 绘制图像
+          this.draw = () => {
+            cvsCtx.beginPath();
+            cvsCtx.fillStyle = this.color;
+            cvsCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+            cvsCtx.fill();
+          }
+          // 更新位置
+          this.move = () => {
+            this.x += this.speedX
+            if (this.x > canvas.width - this.r) {
+              this.speedX *= -1
+            } else if (this.x < this.r) {
+              this.speedX *= -1
+            }
+
+            this.y += this.speedY
+            if (this.y > canvas.height - this.r) {
+              this.speedY *= -1
+            } else if (this.y < this.r) {
+              this.speedY *= -1
+            }
+          }
+        }
+
+        let ball = new Ball(100, 100, 50, 5, 5, 'red')
+        function start() {
+          // 清除画布
+          cvsCtx.clearRect(0, 0, canvas.width, canvas.height);
+          // 绘制图像
+          ball.draw();
+          // 更新位置
+          ball.move();
+          window.requestAnimationFrame(start);
+        }
+        start();
+
+      }
+    }
+
+  </script>
+</body>
+
+</html>
